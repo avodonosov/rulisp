@@ -7,7 +7,7 @@
 
 (defsystem rulisp
   :depends-on (#:restas 
-               #:postmodern
+               #:postmodern #:simple-date
                #:zip
                #:restas-simple-auth #:restas-openid-auth
                #:restas-planet #:restas-wiki
