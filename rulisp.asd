@@ -9,7 +9,8 @@
   :depends-on (#:restas 
                #:postmodern
                #:zip
-               #:restas-simple-auth #:restas-planet #:restas-wiki
+               #:restas-simple-auth #:restas-openid-auth
+               #:restas-planet #:restas-wiki
                #:restas-colorize #:restas-directory-publisher #:restas-forum
                #:xfactory #:cl-typesetting
                #:wiki-parser)

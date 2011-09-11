@@ -12,9 +12,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun compute-user-login-name ()
-  (restas:with-submodule (restas:find-submodule 'rulisp-auth
-                                                (restas:find-upper-submodule #.*package*))
-    (restas.simple-auth::compute-user-login-name)))
+  (or (restas:with-submodule (restas:find-submodule 'rulisp-auth
+                                                    (restas:find-upper-submodule #.*package*))
+        (restas.simple-auth::compute-user-login-name))
+
+      (restas:with-submodule (restas:find-submodule 'rulisp-openid-auth
+                                                    (restas:find-upper-submodule #.*package*))
+        (restas.openid-auth:cur-user))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; rulisp templates
@@ -100,6 +104,14 @@
   (restas.simple-auth:*noreply-email* *noreply-mail-account*)
   (restas.simple-auth:*cookie-cipher-key* *cookie-cipher-key*)
   (restas.simple-auth:*finalize-page* (lambda (content)
+                                        (rulisp-finalize-page :title (getf content :title)
+                                                              :css '("style.css")
+                                                              :content (getf content :body)))))
+
+;;;; OpenID auth
+
+(restas:mount-submodule rulisp-openid-auth (#:restas.openid-auth)
+  (restas.openid-auth:*finalize-page* (lambda (content)
                                         (rulisp-finalize-page :title (getf content :title)
                                                               :css '("style.css")
                                                               :content (getf content :body)))))
