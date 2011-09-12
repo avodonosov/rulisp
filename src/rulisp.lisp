@@ -111,6 +111,7 @@
 ;;;; OpenID auth
 
 (restas:mount-submodule rulisp-openid-auth (#:restas.openid-auth)
+  (restas.openid-auth:*host-port* "173.230.157.202:8080")
   (restas.openid-auth:*finalize-page* (lambda (content)
                                         (rulisp-finalize-page :title (getf content :title)
                                                               :css '("style.css")
