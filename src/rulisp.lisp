@@ -43,11 +43,12 @@
                            ("Файлы" rulisp-files restas.directory-publisher:route :path "")
                            ("Поиск" nil google-search)))
 
-(defun rulisp-finalize-page (&key title css js content)
+(defun rulisp-finalize-page (&key title css css-module-local js content)
   (rulisp.view:main-frame 
    (list :title title
-         :css (iter (for item in css)
-                    (collect (format nil "/css/~A" item)))
+         :css (append (iter (for item in css)
+                            (collect (format nil "/css/~A" item)))
+                      css-module-local)
          :js js
          :gecko-png  "/image/gecko.png"
          :user (compute-user-login-name)
@@ -115,6 +116,8 @@
   (restas.openid-auth:*finalize-page* (lambda (content)
                                         (rulisp-finalize-page :title (getf content :title)
                                                               :css '("style.css")
+                                                              :css-module-local (getf content :css)
+                                                              :js (getf content :js)
                                                               :content (getf content :body)))))
 
 ;;;; forum
